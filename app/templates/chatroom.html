@@ -17,10 +17,12 @@
     .chatroom {
         margin: 5px;
     }
-    a{
+
+    a {
         color: white;
     }
-    a:hover{
+
+    a:hover {
         color: gray;
         text-decoration: none;
     }
@@ -67,8 +69,25 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
+<script
+        src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+{% if rooms|length > 0 %}
+    <script>
+    $(document).ready(function () {
+        if (localStorage.channel !== "" && localStorage.channel != "" && localStorage.channel !== undefined && localStorage.channel !== "undefined") {
+            var win = window.open('http://' + document.domain + ':' + location.port + '/chat/'+ localStorage.channel, '_blank');
+            if (win) {
+                win.focus();
+            } else {
+                alert('Please allow popups for this website');
+            }
+        }
+    });
+</script>
+{% endif %}
 </body>
 </html>

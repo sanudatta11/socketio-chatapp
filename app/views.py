@@ -36,6 +36,8 @@ def chat(room):
     name = session.get('name', '')
     if room is None:
         room = session.get('room', '')
+    else:
+        session['room'] = room
     if name == '' or room == '':
         return redirect(url_for('index'))
     return render_template('chat.html', name=name, room=room)
@@ -51,6 +53,7 @@ def joined(message):
     room = session.get('room')
     if room not in roomMap:
         roomArray.append(room)
+        roomMap[room] = True
     join_room(room)
     emit('status', {'msg': session.get('name') + ' has entered the room.'}, room=room,broadcast=True)
     if room in messageMap:

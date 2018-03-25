@@ -10,6 +10,7 @@
             socket = io.connect('http://' + document.domain + ':' + location.port + '/chat');
             socket.on('connect', function () {
                 socket.emit('joined', {});
+                localStorage.channel = $('#channelName').val();
             });
             socket.on('status', function (data) {
                 $('#chat').val($('#chat').val() + '<' + data.msg + '>\n');
@@ -36,12 +37,14 @@
                     text = $('#text').val();
                     $('#text').val('');
                     socket.emit('text', {msg: text});
+                    console.log("Sent Message" + text)
                 }
             });
         });
         function leave_room() {
             socket.emit('left', {}, function () {
                 socket.disconnect();
+                localStorage.channel = undefined;
                 window.location.href = "{{ url_for('index') }}";
             });
         }
@@ -49,6 +52,7 @@
 </head>
 <body>
 <h1>Flask-SocketIO-Chat: {{ room }}</h1>
+<input type="text" value="{{ room }}" id="channelName" hidden>
 <textarea id="chat" cols="80" rows="20"></textarea><br><br>
 <input id="text" size="80" placeholder="Enter your message here"><br><br>
 <a href="#" onclick="leave_room();">Leave this room</a>

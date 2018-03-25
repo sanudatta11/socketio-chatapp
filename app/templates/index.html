@@ -9,5 +9,25 @@
             {{ form.name.label }}: {{ form.name() }} {% for error in form.name.errors %}{{ error }}{% endfor %}<br>
             {{ form.submit() }}
         </form>
+        <script
+      src="https://code.jquery.com/jquery-3.3.1.min.js"
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous"></script>
+        <script>
+          $(document).ready(function() {
+            if($('#name').val() !== "")
+                    localStorage.name = $('#name').val();
+            loadSettings();
+
+            $('#submit').click(function () {
+                if($('#name').val() !== "")
+                    localStorage.name = $('#name').val();
+            });
+          });
+
+          function loadSettings() {
+            $('#name').val();
+          }
+        </script>
     </body>
 </html>
