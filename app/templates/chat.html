@@ -6,6 +6,7 @@
     <script type="text/javascript" charset="utf-8">
         var socket;
         var newUser = true;
+        var timeoutVar;
         $(document).ready(function () {
             socket = io.connect('http://' + document.domain + ':' + location.port + '/chat');
             socket.on('connect', function () {
@@ -34,11 +35,21 @@
             $('#text').keypress(function (e) {
                 var code = e.keyCode || e.which;
                 if (code == 13) {
+                    $('#cancelBtn').removeAttr('hidden');
                     text = $('#text').val();
                     $('#text').val('');
-                    socket.emit('text', {msg: text});
-                    console.log("Sent Message" + text)
+                    timeoutVar = setTimeout(
+                        function () {
+                            socket.emit('text', { msg: text });
+                            $('#cancelBtn').attr('hidden', true);
+                            console.log("Sent Message" + text)
+                        }, 5000);
                 }
+            });
+
+            $('#cancelBtn').click(function(){
+                clearTimeout(timeoutVar);
+                $('#cancelBtn').attr('hidden', true);
             });
         });
         function leave_room() {
@@ -54,7 +65,9 @@
 <h1>Flask-SocketIO-Chat: {{ room }}</h1>
 <input type="text" value="{{ room }}" id="channelName" hidden>
 <textarea id="chat" cols="80" rows="20"></textarea><br><br>
-<input id="text" size="80" placeholder="Enter your message here"><br><br>
+<input id="text" size="80" placeholder="Enter your message here">
+<button id="cancelBtn" hidden="true">Cancel</button>
+<br><br>
 <a href="#" onclick="leave_room();">Leave this room</a>
 </body>
 </html>
